@@ -22,7 +22,7 @@ urlpatterns = [
     path('test/', TestView.as_view(), name="test"),
     path('', LandingPageView.as_view(), name="landing-page"),
     path('form-confirmation/', ConfirmationView.as_view(), name="form-confirmation"),
-    path('add/', AddDonationView.as_view(), name="add-donation"),
+    path('add/', AddDonationView.as_view(), name="add"),
     path('login/', LoginView.as_view(), name="login"),
     path('register/', RegisterView.as_view(), name="register"),
 ]
