@@ -17,7 +17,7 @@ class Institution(models.Model):
     )
     name = models.CharField(max_length=64)
     description = models.CharField(max_length=252)
-    type = models.CharField(choices=TYPE_CHOICES, max_length=3, default='FUND')
+    type = models.CharField(choices=TYPE_CHOICES, max_length=4, default='FUND')
     categories = models.ManyToManyField(Category)
 
 
