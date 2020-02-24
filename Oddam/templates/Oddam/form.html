@@ -1,21 +1,12 @@
-{% extends "Oddam/__base__.html" %}}
-{% load static %}
-{% block content %}
+<{% extends "Oddam/__base__.html" %}
 
-    <header>
+{% block title %}Oddaję{% endblock %}
+{% block header %}
+<header class="header--form-page">
       <nav class="container container--70">
-        <ul class="nav--actions">
-          <li class="logged-user">
-            Witaj Agata
-            <ul class="dropdown">
-              <li><a href="#">Profil</a></li>
-              <li><a href="#">Ustawienia</a></li>
-              <li><a href="#">Wyloguj</a></li>
-            </ul>
-          </li>
-        </ul>
+{% endblock %}
 
-      </nav>
+{% block content %}
 
       <div class="slogan container container--90">
         <div class="slogan--item">
@@ -44,7 +35,6 @@
         </div>
       </div>
     </header>
-
 
     <section class="form--steps">
       <div class="form--steps-instructions">
@@ -292,8 +282,4 @@
         </form>
       </div>
     </section>
-
-
-
-    <script src="{% static "Oddam/js/app.js" %}"></script>
-{% endblock content %}
+{% endblock %}

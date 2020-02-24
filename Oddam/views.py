@@ -1,4 +1,5 @@
-from django.contrib.auth import authenticate
+from django.contrib import auth
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.db.models import Sum
@@ -10,7 +11,6 @@ from Oddam.utils import (
     check_passwords_match,
     NotMatchingPasswordsError,
     ERROR_MESSAGE,
-    SUCCESS_MESSAGE,
 )
 
 
@@ -54,12 +54,19 @@ class LoginView(View):
         email = request.POST.get("email")
         password = request.POST.get("password")
         user = authenticate(username=email, password=password)
-        if user is not None:
+        if User.objects.filter(email=email).count() < 1:
+            return redirect("register")
+        elif user is not None:
+            login(request, user)
             return redirect("landing-page")
         else:
             message = ERROR_MESSAGE["not_authenticted"]
             return render(request, "Oddam/login.html", context={"message": message})
 
+class LogoutView(View):
+    def get(self, request):
+        auth.logout(request)
+        return redirect("landing-page")
 
 class RegisterView(View):
     def get(self, request):
