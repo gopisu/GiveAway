@@ -18,5 +18,9 @@ ERROR_MESSAGE = {
     "user_exists": "Podany użytkownik istnieje w naszej bazie. Zaloguj się na swoje konto.",
     "passwords_not_matching": "Wpisz dwukrotnie to samo hasło.",
     "empty_email": "Pole email nie może byc puste.",
+    "not_authenticted": "Spróbuj ponownie. Błędny użytkownik lub hasło",
 }
-SUCCESS_MESSAGE = {"new_user": "Utworzono użytkownika. Zaloguj się."}
+SUCCESS_MESSAGE = {
+    "new_user": "Utworzono użytkownika. Zaloguj się.",
+    "authenticated": "Zalogowano",
+}

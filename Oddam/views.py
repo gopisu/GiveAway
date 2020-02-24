@@ -1,7 +1,8 @@
+from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.db.models import Sum
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 
 from Oddam.models import Donation, Institution
@@ -49,6 +50,16 @@ class LoginView(View):
     def get(self, request):
         return render(request, "Oddam/login.html")
 
+    def post(self, request):
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        user = authenticate(username=email, password=password)
+        if user is not None:
+            return redirect("landing-page")
+        else:
+            message = ERROR_MESSAGE["not_authenticted"]
+            return render(request, "Oddam/login.html", context={"message": message})
+
 
 class RegisterView(View):
     def get(self, request):
@@ -60,7 +71,6 @@ class RegisterView(View):
         email = request.POST.get("email")
         password = request.POST.get("password")
         password2 = request.POST.get("password2")
-        template = "Oddam/register.html"
         try:
             check_passwords_match(password, password2)
             User.objects.create_user(
@@ -70,12 +80,11 @@ class RegisterView(View):
                 last_name=last_name,
                 password=password,
             )
-            message = SUCCESS_MESSAGE["new_user"]
-            template = "Oddam/login.html"
+            return redirect("login")
         except IntegrityError:
             message = ERROR_MESSAGE["user_exists"]
         except NotMatchingPasswordsError:
             message = ERROR_MESSAGE["passwords_not_matching"]
         except ValueError:
             message = ERROR_MESSAGE["empty_email"]
-        return render(request, template, context={"message": message})
+        return render(request, "registration", context={"message": message})
