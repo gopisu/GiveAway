@@ -1,12 +1,14 @@
-<{% extends "Oddam/__base__.html" %}
+{% extends "Oddam/__base__.html" %}
 
-{% block title %}Formularz{% endblock %}
-{% load static %}
+{% block title %}Logowanie{% endblock %}
+{% block header %}
+    <header>
+    <nav class="container container--70">
+{% endblock %}
 {% block content %}
-
     <section class="login-page">
-      <h2>Zaloguj się</h2>
-      <form>
+      <h2>{{ message }}</h2>
+      <form method="post">{% csrf_token %}
         <div class="form-group">
           <input type="email" name="email" placeholder="Email" />
         </div>
@@ -16,7 +18,7 @@
         </div>
 
         <div class="form-group form-group--buttons">
-          <a href="#" class="btn btn--without-border">Załóż konto</a>      
+          <a href="{% url 'register' %}" class="btn btn--without-border">Załóż konto</a>
           <button class="btn" type="submit">Zaloguj się</button> 
         </div>
       </form>

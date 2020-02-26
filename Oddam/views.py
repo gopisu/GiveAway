@@ -1,21 +1,26 @@
+from django.contrib import auth
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.db.models import Sum
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 
-from Oddam.models import Donation, Institution
+from Oddam.models import Donation, Institution, Category
 from Oddam.utils import (
     check_passwords_match,
     NotMatchingPasswordsError,
     ERROR_MESSAGE,
-    SUCCESS_MESSAGE,
 )
 
 
-class AddDonationView(View):
+class AddDonationView(LoginRequiredMixin, View):
+    login_url = '/login/'
     def get(self, request):
-        return render(request, "Oddam/form.html")
+        categories = Category.objects.all()
+        institutions = Institution.objects.all()
+        return render(request, "Oddam/form.html", context={'categories': categories, 'institutions': institutions})
 
 
 class ConfirmationView(View):
@@ -49,6 +54,27 @@ class LoginView(View):
     def get(self, request):
         return render(request, "Oddam/login.html")
 
+    def post(self, request):
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        user = authenticate(username=email, password=password)
+        if User.objects.filter(email=email).count() < 1:
+            return redirect("register")
+        elif user is not None:
+            login(request, user)
+            return redirect("landing-page")
+        else:
+            message = ERROR_MESSAGE["not_authenticted"]
+            return render(request, "Oddam/login.html", context={"message": message})
+
+class LogoutView(View):
+    def get(self, request):
+        auth.logout(request)
+        return redirect("landing-page")
+
+class UserView(View):
+    def get(self, request):
+        return render(request, "Oddam/user.html")
 
 class RegisterView(View):
     def get(self, request):
@@ -60,7 +86,6 @@ class RegisterView(View):
         email = request.POST.get("email")
         password = request.POST.get("password")
         password2 = request.POST.get("password2")
-        template = "Oddam/register.html"
         try:
             check_passwords_match(password, password2)
             User.objects.create_user(
@@ -70,12 +95,11 @@ class RegisterView(View):
                 last_name=last_name,
                 password=password,
             )
-            message = SUCCESS_MESSAGE["new_user"]
-            template = "Oddam/login.html"
+            return redirect("login")
         except IntegrityError:
             message = ERROR_MESSAGE["user_exists"]
         except NotMatchingPasswordsError:
             message = ERROR_MESSAGE["passwords_not_matching"]
         except ValueError:
             message = ERROR_MESSAGE["empty_email"]
-        return render(request, template, context={"message": message})
+        return render(request, "registration", context={"message": message})

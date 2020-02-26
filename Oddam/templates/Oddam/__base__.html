@@ -2,71 +2,85 @@
 
 {% load static %}
 <html lang="pl">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <title>{% block title %}{% endblock %}</title>
-    <link rel="shortcut icon" href="{% static 'Oddam/images/favicon.ico' %}" />
+    <link rel="shortcut icon" href="{% static 'Oddam/images/favicon.ico' %}"/>
     <link rel="stylesheet" href="{% static "Oddam/css/style.css" %}"/>
-  </head>
-  <body>
-  {% block header %}{% endblock %}
-        <ul class="nav--actions">
-            <li><a href="{% url "login" %}" class="btn btn--small btn--without-border">Zaloguj</a></li>
-            <li><a href="{% url "register" %}" class="btn btn--small btn--highlighted">Załóż konto</a></li>
-        </ul>
-        <ul>
-          <li><a href="{% url 'landing-page'%}" class="btn btn--without-border active">Start</a></li>
-          <li><a href="{% url 'landing-page'%}#steps" class="btn btn--without-border">O co chodzi?</a></li>
-          <li><a href="{% url 'landing-page'%}#about-us" class="btn btn--without-border">O nas</a></li>
-          <li><a href="{% url 'landing-page'%}#help" class="btn btn--without-border">Fundacje i organizacje</a></li>
-          <li><a href="{% url 'add'%}" class="btn btn--without-border">Przekaż dary</a></li>
-          <li><a href="#contact" class="btn btn--without-border">Kontakt</a></li>
-        </ul>
-      </nav>
+</head>
+<body>
+{% block header %}{% endblock %}
+<ul class="nav--actions">
+    {% if user.is_authenticated %}
+        <li class="logged-user">
+        Witaj {{ user.first_name }}
+            <ul class="dropdown">
+              <li><a href="{% url "user" %}">Profil</a></li>
+              <li><a href="#">Ustawienia</a></li>
+         {% if user.is_authenticated and user.is_superuser %}
+                <li><a href="/admin">Panel administracyjny</a></li>
+             {% endif %}
+              <li><a href="{% url "logout" %}">Wyloguj</a></li>
+            </ul>
+          </li>
+    {% else %}
+        <li><a href="{% url "login" %}" class="btn btn--small btn--without-border">Zaloguj</a></li>
+        <li><a href="{% url "register" %}" class="btn btn--small btn--highlighted">Załóż konto</a></li>
+    {% endif %}
+    </ul>
+    <ul>
+        <li><a href="{% url 'landing-page' %}" class="btn btn--without-border active">Start</a></li>
+        <li><a href="{% url 'landing-page' %}#steps" class="btn btn--without-border">O co chodzi?</a></li>
+        <li><a href="{% url 'landing-page' %}#about-us" class="btn btn--without-border">O nas</a></li>
+        <li><a href="{% url 'landing-page' %}#help" class="btn btn--without-border">Fundacje i organizacje</a></li>
+        <li><a href="{% url 'add' %}" class="btn btn--without-border">Przekaż dary</a></li>
+        <li><a href="#contact" class="btn btn--without-border">Kontakt</a></li>
+    </ul>
+    </nav>
+    {% block description %} {% endblock %}
     </header>
-  {% block description %} {% endblock %}
 
     <!-- //--------------------------- page content -------------------------// -->
     {% block content %}{% endblock content %}
     <!-- //--------------------------- page content end ---------------------// -->
     <footer>
-      <div id="contact" class="contact">
-        <h2>Skontaktuj się z nami</h2>
-        <h3>Formularz kontaktowy</h3>
-        <form class="form--contact">
-          <div class="form-group form-group--50">
-            <input type="text" name="name" placeholder="Imię" />
-          </div>
-          <div class="form-group form-group--50">
-            <input type="text" name="surname" placeholder="Nazwisko" />
-          </div>
+        <div id="contact" class="contact">
+            <h2>Skontaktuj się z nami</h2>
+            <h3>Formularz kontaktowy</h3>
+            <form class="form--contact">
+                <div class="form-group form-group--50">
+                    <input type="text" name="name" placeholder="Imię"/>
+                </div>
+                <div class="form-group form-group--50">
+                    <input type="text" name="surname" placeholder="Nazwisko"/>
+                </div>
 
-          <div class="form-group">
+                <div class="form-group">
             <textarea
-              name="message"
-              placeholder="Wiadomość"
-              rows="1"
+                    name="message"
+                    placeholder="Wiadomość"
+                    rows="1"
             ></textarea>
-          </div>
+                </div>
 
-          <button class="btn" type="submit">Wyślij</button>
-        </form>
-      </div>
-      <div class="bottom-line">
-        <span class="bottom-line--copy">Copyright &copy; 2018</span>
-        <div class="bottom-line--icons">
-          <a href="#" class="btn btn--small"
-            ><img src="{% static "Oddam/images/icon-facebook.svg"%}"
-          /></a>
-          <a href="#" class="btn btn--small"
-            ><img src="{% static "Oddam/images/icon-instagram.svg"%}"
-          /></a>
+                <button class="btn" type="submit">Wyślij</button>
+            </form>
         </div>
-      </div>
+        <div class="bottom-line">
+            <span class="bottom-line--copy">Copyright &copy; 2018</span>
+            <div class="bottom-line--icons">
+                <a href="#" class="btn btn--small"
+                ><img src="{% static "Oddam/images/icon-facebook.svg" %}"
+                /></a>
+                <a href="#" class="btn btn--small"
+                ><img src="{% static "Oddam/images/icon-instagram.svg" %}"
+                /></a>
+            </div>
+        </div>
     </footer>
-    </body>
-  <script src="{% static "Oddam/js/app.js"%}"></script>
+</body>
+<script src="{% static "Oddam/js/app.js" %}"></script>
 
 </html>
