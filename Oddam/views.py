@@ -1,12 +1,13 @@
 from django.contrib import auth
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.db.models import Sum
 from django.shortcuts import render, redirect
 from django.views import View
 
-from Oddam.models import Donation, Institution
+from Oddam.models import Donation, Institution, Category
 from Oddam.utils import (
     check_passwords_match,
     NotMatchingPasswordsError,
@@ -14,9 +15,12 @@ from Oddam.utils import (
 )
 
 
-class AddDonationView(View):
+class AddDonationView(LoginRequiredMixin, View):
+    login_url = '/login/'
     def get(self, request):
-        return render(request, "Oddam/form.html")
+        categories = Category.objects.all()
+        institutions = Institution.objects.all()
+        return render(request, "Oddam/form.html", context={'categories': categories, 'institutions': institutions})
 
 
 class ConfirmationView(View):
@@ -67,6 +71,10 @@ class LogoutView(View):
     def get(self, request):
         auth.logout(request)
         return redirect("landing-page")
+
+class UserView(View):
+    def get(self, request):
+        return render(request, "Oddam/user.html")
 
 class RegisterView(View):
     def get(self, request):

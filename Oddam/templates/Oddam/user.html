@@ -1,0 +1,21 @@
+{% extends "Oddam/__base__.html" %}
+{% load static %}
+{% block header %}
+    <header class="header--main-page">
+    <nav class="container container--70">
+{% endblock %}
+
+{% block content %}
+
+    <section id="stats" class="stats">
+      <div class="container container--85">
+<h2>
+            <br>Imie: {{ user.first_name }}
+            <br>nazwisko: {{ user.last_name }}
+            <br>email: {{ user.email }}
+            <br>
+</h2>
+      </div>
+    </section>
+
+{% endblock content %}
