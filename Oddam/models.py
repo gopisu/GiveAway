@@ -22,7 +22,6 @@ class Institution(models.Model):
         return self.name
 
 
-
 class Donation(models.Model):
     quantity = models.PositiveIntegerField()
     categories = models.ManyToManyField(Category)

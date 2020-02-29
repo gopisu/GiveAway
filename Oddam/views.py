@@ -16,16 +16,48 @@ from Oddam.utils import (
 
 
 class AddDonationView(LoginRequiredMixin, View):
-    login_url = '/login/'
+    login_url = "/login/"
+
     def get(self, request):
         categories = Category.objects.all()
         institutions = Institution.objects.all()
-        return render(request, "Oddam/form.html", context={'categories': categories, 'institutions': institutions})
-
+        return render(
+            request,
+            "Oddam/form.html",
+            context={"categories": categories, "institutions": institutions},
+        )
+    def post(self, request):
+        categories = request.POST.get("category")
+        bags = request.POST.get("bags")
+        organization = request.POST.get("organization")
+        address = request.POST.get("address")
+        city = request.POST.get("city")
+        postcode = request.get("postcode")
+        phone = request.get("phone")
+        data = request.get("data")
+        time = request.get("time")
+        more_info = request.more_info("more_info")
+        new_donation = Donation.objects.create(
+            quantity=bags,
+            institution=organization,
+            address=address,
+            city=city,
+            postcode=postcode,
+            phone_number=phone,
+            pick_up_comment=more_info,
+            pick_up_date=data,
+            pick_up_time=time,
+        )
+        return render(
+            request,
+            "Oddam/form-confirmation.html"
+        )
 
 class ConfirmationView(View):
     def get(self, request):
         return render(request, "Oddam/form-confirmation.html")
+
+
 
 
 class LandingPageView(View):
@@ -67,14 +99,19 @@ class LoginView(View):
             message = ERROR_MESSAGE["not_authenticted"]
             return render(request, "Oddam/login.html", context={"message": message})
 
+
 class LogoutView(View):
     def get(self, request):
         auth.logout(request)
         return redirect("landing-page")
 
+
 class UserView(View):
     def get(self, request):
-        return render(request, "Oddam/user.html")
+        user = User.objects.get(username=request.user.username)
+        donations = Donation.objects.filter(user=user)
+        return render(request, "Oddam/user.html", context={"donations": donations})
+
 
 class RegisterView(View):
     def get(self, request):

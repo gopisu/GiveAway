@@ -12,10 +12,20 @@
 <h2>
             <br>Imie: {{ user.first_name }}
             <br>nazwisko: {{ user.last_name }}
-            <br>email: {{ user.email }}
-            <br>
+            <br>email: {{ user.email }} <br> <br>
+           {% for donation in donations %}
+     <br>{{ forloop.counter }}. Podarowałeś organizacji: {{ donation.institution }}
+               <br>Liczba worków: {{ donation.quantity }}
+               <br>Kategorie darów:{% for cat in donation.categories.all %}
+               <br>{{ cat.name }}
+
+    {% endfor %}
+    <br> Data odbioru: {{ donation.pick_up_date }}, g. {{ donation.pick_up_time }}
+    <br>
+    {% endfor %}
 </h2>
       </div>
     </section>
 
 {% endblock content %}
+</nav>
