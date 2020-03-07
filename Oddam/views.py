@@ -26,6 +26,7 @@ class AddDonationView(LoginRequiredMixin, View):
             "Oddam/form.html",
             context={"categories": categories, "institutions": institutions},
         )
+
     def post(self, request):
         categories = request.POST.get("category")
         bags = request.POST.get("bags")
@@ -48,16 +49,12 @@ class AddDonationView(LoginRequiredMixin, View):
             pick_up_date=data,
             pick_up_time=time,
         )
-        return render(
-            request,
-            "Oddam/form-confirmation.html"
-        )
+        return render(request, "Oddam/form-confirmation.html")
+
 
 class ConfirmationView(View):
     def get(self, request):
         return render(request, "Oddam/form-confirmation.html")
-
-
 
 
 class LandingPageView(View):

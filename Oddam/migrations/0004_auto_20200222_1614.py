@@ -5,15 +5,21 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('Oddam', '0003_donation'),
+        ("Oddam", "0003_donation"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='institution',
-            name='type',
+            model_name="institution",
+            name="type",
             field=models.CharField(
-                choices=[('ORG', 'Organizacja pozarządowa'), ('FUND', 'Fundacja'), ('GAT', 'Zbiórka lokalna')],
-                default='FUND', max_length=4),
+                choices=[
+                    ("ORG", "Organizacja pozarządowa"),
+                    ("FUND", "Fundacja"),
+                    ("GAT", "Zbiórka lokalna"),
+                ],
+                default="FUND",
+                max_length=4,
+            ),
         ),
     ]

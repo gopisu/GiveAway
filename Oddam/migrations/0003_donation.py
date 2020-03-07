@@ -10,24 +10,48 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('Oddam', '0002_institution'),
+        ("Oddam", "0002_institution"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Donation',
+            name="Donation",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('quantity', models.PositiveIntegerField()),
-                ('address', models.CharField(max_length=252)),
-                ('phone_number', models.CharField(max_length=21)),
-                ('city', models.CharField(max_length=64)),
-                ('zip_code', models.CharField(max_length=126)),
-                ('pick_up_date', models.DateField()),
-                ('pick_up_time', models.TimeField()),
-                ('categories', models.ManyToManyField(to='Oddam.Category')),
-                ('institution', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='institutionDonation', to='Oddam.Institution')),
-                ('user', models.ForeignKey(default=None, null=True, on_delete=models.SET(Oddam.utils.get_sentinel_user), related_name='userDonation', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("quantity", models.PositiveIntegerField()),
+                ("address", models.CharField(max_length=252)),
+                ("phone_number", models.CharField(max_length=21)),
+                ("city", models.CharField(max_length=64)),
+                ("zip_code", models.CharField(max_length=126)),
+                ("pick_up_date", models.DateField()),
+                ("pick_up_time", models.TimeField()),
+                ("categories", models.ManyToManyField(to="Oddam.Category")),
+                (
+                    "institution",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="institutionDonation",
+                        to="Oddam.Institution",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        default=None,
+                        null=True,
+                        on_delete=models.SET(Oddam.utils.get_sentinel_user),
+                        related_name="userDonation",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]
